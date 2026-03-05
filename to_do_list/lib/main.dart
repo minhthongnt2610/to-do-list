@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'my_app.dart';
+
+/// Hàm main chạy ứng dụng
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// Khởi tạo Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /// runApp nhận vào một widget và chạy ứng dụng
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
+}
