@@ -352,3 +352,5 @@ jobs:
             IPA_PATH=$(find build -name "*.ipa" -type f | head -1)
             echo "- **IPA Size:** $(ls -lh "$IPA_PATH" | awk '{print $5}')" >> $GITHUB_STEP_SUMMARY
           fi
+
+
