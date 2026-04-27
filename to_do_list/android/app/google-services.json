@@ -4,6 +4,26 @@
     "project_id": "to-do-list-d6926",
     "storage_bucket": "to-do-list-d6926.firebasestorage.app"
   },
-  "client": [],
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936526769245:android:2ab84ef240a9a6591371b4",
+        "android_client_info": {
+          "package_name": "com.example.to_do_list"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-9dKuXYp-C5Pxe-aN3cdYiUxVNbMy8MA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
   "configuration_version": "1"
 }
