@@ -10,10 +10,8 @@ import 'package:to_do_list/data/services/dialog_service.dart';
 import '../../common_widgets/primary_app_bar.dart';
 import '../../constants/app_colors.dart';
 import '../../utilities/utilities.dart';
-import '../home/home_screen.dart';
 import '../login/login_screen.dart';
 import '../new_task/widgets/input_field.dart';
-import '../update_profile/update_profile_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/register';
@@ -25,11 +23,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  String? _email = 'todolist@mailinator.com';
+  String? _email = '';
 
-  String? _password = 'Todolist12345@';
+  String? _password = '';
 
-  String? _confirmPassword = 'Todolist12345@';
+  String? _confirmPassword = '';
 
   final _authService = AuthService();
   final _dialogService = DialogService();
@@ -223,17 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         _dialogService.hideProgressDialog(context);
         _hideKeyboard();
-        if (_authService.isUserUpdatedProfile()) {
-          await Navigator.of(context).pushNamedAndRemoveUntil(
-            HomeScreen.routeName,
-            (route) => false,
-          );
-        } else {
-          await Navigator.of(context).pushNamedAndRemoveUntil(
-            UpdateProfileScreen.routeName,
-            (route) => false,
-          );
-        }
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } on FirebaseAuthException catch (error) {
         if (!mounted) {
           return;

@@ -23,7 +23,7 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  String? _email = 'todolist@mailinator.com';
+  String? _email = '';
 
   final _authService = AuthService();
 

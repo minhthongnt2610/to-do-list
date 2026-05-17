@@ -2,15 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/common_widgets/avatar.dart';
 import 'package:to_do_list/common_widgets/confirmation_dialog.dart';
-import 'package:to_do_list/common_widgets/primary_app_bar.dart';
 import 'package:to_do_list/data/data_sources/local/image_picker/image_picker_service.dart';
 import 'package:to_do_list/data/data_sources/remote/firebase/auth_service.dart';
 import 'package:to_do_list/data/data_sources/remote/firebase/storage_service.dart';
 import 'package:to_do_list/data/services/dialog_service.dart';
-import 'package:to_do_list/screens/start/start_screen.dart';
+import 'package:to_do_list/screens/change_password/change_password_screen.dart';
 import 'package:to_do_list/utilities/utilities.dart';
 
-import '../../common_widgets/primary_button.dart';
 import '../../constants/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -37,18 +35,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _initUser() async {
-    _user = _authService.currentUser;
+    final user = _authService.currentUser;
+    if (mounted) {
+      setState(() {
+        _user = user;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_user == null) {
+      return const Scaffold(
+        backgroundColor: AppColors.hex020206,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.hex020206,
-      appBar: PrimaryAppBar(
-        title: 'Profile',
-        onBack: () {
-          Navigator.of(context).pop();
-        },
+      appBar: AppBar(
+        backgroundColor: AppColors.hex020206,
+        scrolledUnderElevation: 0,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: false,
+        titleSpacing: 20,
       ),
       body: SafeArea(
         child: Padding(
@@ -74,7 +91,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               const Spacer(),
-              PrimaryButton(
+
+              // Nút đổi mật khẩu
+              _buildMenuTile(
+                icon: Icons.lock_reset_rounded,
+                label: 'Change password',
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(ChangePasswordScreen.routeName);
+                },
+              ),
+
+              const SizedBox(height: 12),
+
+              // Đường kẻ phân cách
+              Divider(
+                color: Colors.white.withValues(alpha: 0.08),
+                height: 1,
+              ),
+
+              const SizedBox(height: 12),
+
+              // Nút đăng xuất
+              _buildMenuTile(
+                icon: Icons.logout_rounded,
+                label: 'Logout',
+                color: Colors.redAccent,
                 onTap: () async {
                   final isConfirmed = await _showLogoutConfirmationDialog(
                     context: context,
@@ -83,11 +125,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     await _logout();
                   }
                 },
-                title: 'Logout',
               ),
+
               const SizedBox(height: 24),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// Widget nút menu có icon, label và màu tùy chỉnh
+  Widget _buildMenuTile({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color color = AppColors.hexBA83DE,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.hex181818,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: color.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withValues(alpha: 0.15),
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const SizedBox(width: 14),
+            Text(
+              label,
+              style: TextStyle(
+                color:
+                    color == Colors.redAccent ? Colors.redAccent : Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const Spacer(),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.white.withValues(alpha: 0.25),
+              size: 14,
+            ),
+          ],
         ),
       ),
     );
@@ -100,10 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
     _dialogService.hideProgressDialog(context);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      StartScreen.routeName,
-      (route) => false,
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   Future<void> _updateAvatar() async {

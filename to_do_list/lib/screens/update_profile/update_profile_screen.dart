@@ -11,7 +11,6 @@ import '../../data/data_sources/remote/firebase/auth_service.dart';
 import '../../data/data_sources/remote/firebase/storage_service.dart';
 import '../../data/services/dialog_service.dart';
 import '../../utilities/utilities.dart';
-import '../home/home_screen.dart';
 import '../new_task/widgets/input_field.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -226,16 +225,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             photoURL: url,
             displayName: _name,
           );
+          // Reload user để cập nhật displayName/photoURL mới nhất
+          await _authService.reloadUser();
           if (!mounted) {
             return;
           }
 
           _dialogService.hideProgressDialog(context);
           _hideKeyboard();
-          await Navigator.of(context).pushNamedAndRemoveUntil(
-            HomeScreen.routeName,
-            (route) => false,
-          );
+          // Về AuthRoot để tự chuyển sang MainScreen sau khi cập nhật profile
+          Navigator.of(context).popUntil((route) => route.isFirst);
         }
       } on FirebaseException catch (error) {
         if (!mounted) {

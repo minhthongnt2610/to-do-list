@@ -42,6 +42,23 @@ class FirestoreService {
         .delete();
   }
 
+  /// Xóa nhiều công việc cùng lúc sử dụng WriteBatch
+  Future<void> deleteTasks({
+    required String userId,
+    required List<String> taskIds,
+  }) async {
+    final batch = _firebaseFirestore.batch();
+    for (final taskId in taskIds) {
+      final docRef = _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .collection('tasks')
+          .doc(taskId);
+      batch.delete(docRef);
+    }
+    await batch.commit();
+  }
+
   /// Lấy danh sách tất cả công việc của một người dùng
   Stream<List<FbTaskModel>> getTasks(String userId) {
     return _firebaseFirestore

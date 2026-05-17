@@ -6,10 +6,8 @@ import 'package:to_do_list/common_widgets/primary_app_bar.dart';
 import 'package:to_do_list/common_widgets/primary_button.dart';
 import 'package:to_do_list/common_widgets/tertiary_button.dart';
 import 'package:to_do_list/data/services/dialog_service.dart';
-import 'package:to_do_list/screens/home/home_screen.dart';
 import 'package:to_do_list/screens/register/register_screen.dart';
 import 'package:to_do_list/screens/reset_password/reset_password_screen.dart';
-import 'package:to_do_list/screens/update_profile/update_profile_screen.dart';
 import 'package:to_do_list/utilities/utilities.dart';
 
 import '../../constants/app_colors.dart';
@@ -26,9 +24,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String? _email = 'todolist@mailinator.com';
+  String? _email = '';
 
-  String? _password = 'Todolist12345@';
+  String? _password = '';
 
   final _authService = AuthService();
   final _dialogService = DialogService();
@@ -215,17 +213,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         _dialogService.hideProgressDialog(context);
         _hideKeyboard();
-        if (_authService.isUserUpdatedProfile()) {
-          await Navigator.of(context).pushNamedAndRemoveUntil(
-            HomeScreen.routeName,
-            (route) => false,
-          );
-        } else {
-          await Navigator.of(context).pushNamedAndRemoveUntil(
-            UpdateProfileScreen.routeName,
-            (route) => false,
-          );
-        }
+        // Về AuthRoot (route đầu) để quản lý session thống nhất
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } on FirebaseAuthException catch (error) {
         if (!mounted) {
           return;

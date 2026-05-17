@@ -7,7 +7,11 @@ class NewTaskScreenArguments {
   /// - Nếu taskModel != null thì mang nghĩa là chỉnh sửa công việc
   final TaskModel? taskModel;
 
+  /// Nếu true, taskModel chỉ dùng để điền sẵn dữ liệu (tạo mới, không phải edit)
+  final bool isPreFilled;
+
   const NewTaskScreenArguments({
     this.taskModel,
+    this.isPreFilled = false,
   });
 }

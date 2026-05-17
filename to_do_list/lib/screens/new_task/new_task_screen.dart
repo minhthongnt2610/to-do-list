@@ -70,7 +70,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     
     final taskModel = widget.arguments.taskModel;
-    if (taskModel != null) {
+    if (taskModel != null && !widget.arguments.isPreFilled) {
       
       selectedDate = taskModel.date;
       startTime = taskModel.startTime;
@@ -79,6 +79,15 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       description = taskModel.description;
       selectedTaskPriority = taskModel.priority;
       _isEditing = true;
+    } else if (taskModel != null && widget.arguments.isPreFilled) {
+      // Dữ liệu điền sẵn từ AI chatbot — tạo mới, không phải edit
+      selectedDate = taskModel.date;
+      startTime = taskModel.startTime;
+      endTime = taskModel.endTime;
+      name = taskModel.name;
+      description = taskModel.description;
+      selectedTaskPriority = taskModel.priority;
+      _isEditing = false;
     } else {
       
       selectedDate = DateTime.now();

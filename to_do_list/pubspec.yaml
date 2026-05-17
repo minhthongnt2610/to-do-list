@@ -50,9 +50,23 @@ dependencies:
   flutter_riverpod: ^2.5.3
   riverpod_annotation: ^2.5.3
   firebase_app_check: ^0.3.2+10
+  google_generative_ai: ^0.4.6
+  flutter_dotenv: ^6.0.1
+  firebase_messaging: ^15.1.6
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
+  excel: ^4.0.6
+  path_provider: ^2.1.4
+  share_plus: ^10.0.3
+  shared_preferences: ^2.3.3
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/avatar_app.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -78,6 +92,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/
     - assets/icons/
 
